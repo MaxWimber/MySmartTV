@@ -5,11 +5,8 @@ const path = require('node:path');
 const { app } = require('electron');
 
 const defaults = () => ({
-  customTiles: [],               // [{ id, title, url, color }]
-  folders: [app.getPath('videos')],
   devices: [],                   // [{ id, name, tokenHash, pairedAt, lastSeen }]
   port: 8765,
-  startFullscreen: false,
 });
 
 let data = null;

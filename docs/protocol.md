@@ -1,6 +1,6 @@
 # Протокол пульта SmartTV (v1)
 
-Этот протокол используют тестовый веб-пульт (`desktop/src/remote-web`) и будущее Android-приложение.
+Этот протокол используют Android-приложение (`android/`) и веб-пульт (`desktop/src/remote-web`).
 
 ## Транспорт
 
@@ -74,12 +74,14 @@ http://192.168.1.12:8765/#pair=1234
 
 Значения `key`: `up`, `down`, `left`, `right`, `ok`, `back`, `home`, `playpause`, `seekfwd`, `seekback`, `backspace`, `enter`.
 
-Ссылки YouTube (`youtu.be`, `watch?v=`, `shorts/`) открываются в ТВ-версии YouTube, остальные — как обычный сайт.
+Когда на экране Google TV, кнопки уходят в него. Когда открыта панель SmartTV, кнопки двигают фокус в панели, а `back` и `home` возвращают в Google TV.
+
+Ссылка открывается в Google TV в том приложении, которое её обрабатывает. Ролик YouTube открывается в SmartTube, если он установлен: официальный YouTube в эмуляторе не работает. Если подходящего приложения нет, придёт ошибка `load_failed`.
 
 ## Сообщения от ПК
 
 ```json
-{ "type": "state", "screen": "home|player|service", "title": "YouTube", "tvMode": true }
+{ "type": "state", "screen": "home|service", "title": "Google TV", "tvMode": true }
 { "type": "error", "code": "unauthorized|bad_pin|bad_token|bad_url|load_failed", "message": "Текст для пользователя" }
 ```
 

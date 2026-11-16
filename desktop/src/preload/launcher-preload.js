@@ -1,21 +1,14 @@
 'use strict';
 const { contextBridge, ipcRenderer } = require('electron');
 
-const EVENTS = new Set(['go-home', 'media', 'pairing-changed', 'remote-clients', 'library-changed', 'toast']);
+const EVENTS = new Set(['tv-status', 'pairing-changed', 'toast']);
 
 contextBridge.exposeInMainWorld('stv', {
-  getState: () => ipcRenderer.invoke('state:get'),
-  openTile: (id) => ipcRenderer.invoke('tile:open', id),
-  addTile: (tile) => ipcRenderer.invoke('tile:add', tile),
-  removeTile: (id) => ipcRenderer.invoke('tile:remove', id),
-  addFolder: () => ipcRenderer.invoke('folder:add'),
-  removeFolder: (folder) => ipcRenderer.invoke('folder:remove', folder),
-  rescan: () => ipcRenderer.invoke('library:rescan'),
+  getTvStatus: () => ipcRenderer.invoke('tv:status'),
+  showTv: () => ipcRenderer.invoke('tv:show'),
+  restartTv: () => ipcRenderer.invoke('tv:restart'),
   getPairing: () => ipcRenderer.invoke('pair:get'),
   removeDevice: (id) => ipcRenderer.invoke('device:remove', id),
-  openUrl: (url) => ipcRenderer.invoke('url:open', url),
-  toggleFullscreen: () => ipcRenderer.invoke('window:fullscreen'),
-  setScreen: (name) => ipcRenderer.send('screen', name),
   quit: () => ipcRenderer.send('app:quit'),
   on(channel, callback) {
     if (!EVENTS.has(channel)) throw new Error(`Unknown channel ${channel}`);

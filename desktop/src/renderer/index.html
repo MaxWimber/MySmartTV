@@ -3,62 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data:; media-src 'self' file:; style-src 'self'; script-src 'self'">
+        content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'">
   <title>SmartTV</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="home" class="screen">
-    <header class="topbar">
+  <main class="panel">
+    <section class="left">
       <div class="brand">Smart<span>TV</span></div>
-      <div class="status">
-        <span id="remoteStatus" class="remote-status hidden">Пульт подключён</span>
-        <div class="clock">
-          <div id="clockTime" class="clock-time"></div>
-          <div id="clockDate" class="clock-date"></div>
+
+      <div id="tvState" class="tv-state">
+        <div id="spinner" class="spinner"></div>
+        <div>
+          <h1 id="tvTitle">Запуск Google TV…</h1>
+          <p id="tvDetail" class="muted"></p>
         </div>
       </div>
-    </header>
-    <main id="rows" class="rows">
-      <section class="row" data-row="apps">
-        <h2>Приложения</h2>
-        <div class="row-items" id="tilesRow"></div>
-      </section>
-      <section class="row" data-row="videos">
-        <h2 id="videosTitle">Мои видео</h2>
-        <div class="row-items" id="videosRow"></div>
-      </section>
-      <section class="row" data-row="settings">
-        <h2>Настройки</h2>
-        <div class="row-items" id="settingsRow"></div>
-      </section>
-    </main>
-    <footer class="hints">
-      <span><kbd>←↑↓→</kbd> выбор</span>
-      <span><kbd>Enter</kbd> открыть</span>
-      <span><kbd>Esc</kbd> назад</span>
-      <span><kbd>Ctrl+H</kbd> домой</span>
-      <span><kbd>F11</kbd> во весь экран</span>
-    </footer>
-  </div>
 
-  <div id="player" class="screen player hidden">
-    <video id="video" preload="auto"></video>
-    <div id="osd" class="osd">
-      <div id="osdTitle" class="osd-title"></div>
-      <div class="osd-bar"><div id="osdProgress" class="osd-progress"></div></div>
-      <div class="osd-meta">
-        <span id="osdState"></span>
-        <span id="osdTime"></span>
+      <div id="help" class="help hidden"></div>
+
+      <div class="actions">
+        <button id="btnTv" class="btn primary focusable hidden">Вернуться в Google TV</button>
+        <button id="btnRestart" class="btn focusable">Перезапустить Google TV</button>
+        <button id="btnQuit" class="btn focusable">Выключить SmartTV</button>
       </div>
-      <div class="osd-hint">Enter — пауза · ←/→ — 10 с · ↑/↓ — 1 мин · Esc — выход</div>
-    </div>
-    <div id="playerError" class="player-error hidden"></div>
-  </div>
 
-  <div id="dialogs"></div>
+      <p class="muted hint">Панель SmartTV открывается сочетанием <kbd>Ctrl+Alt+S</kbd> или из значка в трее.</p>
+    </section>
+
+    <section class="right">
+      <h2>Подключить пульт</h2>
+      <div id="pair" class="pair"></div>
+      <h3>Подключённые телефоны</h3>
+      <div id="devices" class="devices"></div>
+    </section>
+  </main>
+
   <div id="toast" class="toast hidden"></div>
-
   <script src="app.js"></script>
 </body>
 </html>
