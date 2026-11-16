@@ -1,16 +1,24 @@
 package local.smarttv.remote.ui
 
 import android.view.HapticFeedbackConstants
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,8 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.Role
@@ -31,6 +41,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -46,26 +57,27 @@ import kotlin.math.sign
  * vibrates, and with [repeat] keeps firing while held.
  */
 @Composable
-fun RemoteButton(
-    label: String,
+fun PressBox(
     modifier: Modifier = Modifier,
-    description: String = label,
+    description: String,
     repeat: Boolean = false,
     shape: Shape = RoundedCornerShape(16.dp),
     container: Color = Palette.Button,
-    fontSize: Int = 17,
-    bold: Boolean = false,
+    pressedContainer: Color = Palette.ButtonPressed,
     onPress: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val view = LocalView.current
     val scope = rememberCoroutineScope()
     val action by rememberUpdatedState(onPress)
     var pressed by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(if (pressed) 0.94f else 1f, tween(90), label = "press")
 
     Box(
         modifier
+            .scale(scale)
             .clip(shape)
-            .background(if (pressed) Palette.ButtonPressed else container)
+            .background(if (pressed) pressedContainer else container)
             .semantics {
                 role = Role.Button
                 contentDescription = description
@@ -92,36 +104,96 @@ fun RemoteButton(
                 })
             },
         contentAlignment = Alignment.Center,
-    ) {
-        Text(label, fontSize = fontSize.sp, fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal, color = Palette.Text)
-    }
+    ) { content() }
 }
+
+/** A text button of the remote. */
+@Composable
+fun RemoteButton(
+    label: String,
+    modifier: Modifier = Modifier,
+    description: String = label,
+    repeat: Boolean = false,
+    shape: Shape = RoundedCornerShape(16.dp),
+    container: Color = Palette.Button,
+    fontSize: Int = 16,
+    bold: Boolean = false,
+    onPress: () -> Unit,
+) = PressBox(modifier, description, repeat, shape, container, onPress = onPress) {
+    Text(label, fontSize = fontSize.sp, fontWeight = if (bold) FontWeight.Bold else FontWeight.Medium, color = Palette.Text)
+}
+
+/** An icon button of the remote. */
+@Composable
+fun RemoteIcon(
+    icon: ImageVector,
+    description: String,
+    modifier: Modifier = Modifier,
+    repeat: Boolean = false,
+    shape: Shape = CircleShape,
+    container: Color = Palette.Button,
+    pressedContainer: Color = Palette.ButtonPressed,
+    tint: Color = Palette.Text,
+    iconSize: Dp = 26.dp,
+    onPress: () -> Unit,
+) = PressBox(modifier, description, repeat, shape, container, pressedContainer, onPress) {
+    Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(iconSize))
+}
+
+/** Several icon buttons joined into one pill, like a volume rocker. */
+@Composable
+fun PillGroup(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
+    Row(
+        modifier
+            .clip(CircleShape)
+            .background(Palette.Button),
+        verticalAlignment = Alignment.CenterVertically,
+        content = content,
+    )
+}
+
+/** One segment of a [PillGroup]. */
+@Composable
+fun RowScope.PillButton(icon: ImageVector, description: String, repeat: Boolean = false, onPress: () -> Unit) =
+    RemoteIcon(
+        icon,
+        description,
+        Modifier.weight(1f).fillMaxHeight(),
+        repeat = repeat,
+        shape = RoundedCornerShape(0.dp),
+        container = Color.Transparent,
+        onPress = onPress,
+    )
 
 /** Round D-pad with OK in the middle. */
 @Composable
-fun DPad(onKey: (String) -> Unit) {
+fun DPad(maxSize: Dp = 300.dp, onKey: (String) -> Unit) {
     BoxWithConstraints(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        val size = minOf(maxWidth * 0.82f, 320.dp)
-        val arrow = size * 0.32f
+        val size = minOf(maxWidth * 0.8f, maxSize)
+        val arrow = size * 0.3f
         Box(
             Modifier
                 .size(size)
                 .clip(CircleShape)
-                .background(Palette.Ring),
+                .background(Palette.RingFill)
+                .border(1.dp, Palette.RingEdge, CircleShape),
         ) {
-            val transparent = Color.Transparent
-            RemoteButton("▲", Modifier.size(arrow).align(Alignment.TopCenter), "Вверх", true, CircleShape, transparent, 22) { onKey("up") }
-            RemoteButton("▼", Modifier.size(arrow).align(Alignment.BottomCenter), "Вниз", true, CircleShape, transparent, 22) { onKey("down") }
-            RemoteButton("◀", Modifier.size(arrow).align(Alignment.CenterStart), "Влево", true, CircleShape, transparent, 22) { onKey("left") }
-            RemoteButton("▶", Modifier.size(arrow).align(Alignment.CenterEnd), "Вправо", true, CircleShape, transparent, 22) { onKey("right") }
-            RemoteButton(
-                "OK",
-                Modifier.size(size * 0.38f).align(Alignment.Center),
+            val clear = Color.Transparent
+            val pad = size * 0.02f
+            RemoteIcon(Icons.Up, "Вверх", Modifier.size(arrow).padding(top = pad).align(Alignment.TopCenter), true, container = clear, iconSize = 34.dp) { onKey("up") }
+            RemoteIcon(Icons.Down, "Вниз", Modifier.size(arrow).padding(bottom = pad).align(Alignment.BottomCenter), true, container = clear, iconSize = 34.dp) { onKey("down") }
+            RemoteIcon(Icons.Left, "Влево", Modifier.size(arrow).padding(start = pad).align(Alignment.CenterStart), true, container = clear, iconSize = 34.dp) { onKey("left") }
+            RemoteIcon(Icons.Right, "Вправо", Modifier.size(arrow).padding(end = pad).align(Alignment.CenterEnd), true, container = clear, iconSize = 34.dp) { onKey("right") }
+            PressBox(
+                Modifier
+                    .size(size * 0.4f)
+                    .align(Alignment.Center)
+                    .border(1.dp, Palette.RingEdge, CircleShape),
+                description = "OK",
                 shape = CircleShape,
                 container = Palette.Ok,
-                fontSize = 22,
-                bold = true,
-            ) { onKey("ok") }
+                onPress = { onKey("ok") },
+            ) { Text("OK", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Palette.Text) }
         }
     }
 }

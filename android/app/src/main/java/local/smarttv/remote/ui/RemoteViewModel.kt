@@ -106,4 +106,9 @@ class RemoteViewModel(app: Application) : AndroidViewModel(app) {
     fun scroll(dy: Int) = client.send("type" to "scroll", "dy" to dy)
     fun text(text: String) = client.send("type" to "text", "text" to text)
     fun open(url: String) = client.send("type" to "open", "url" to url)
+
+    /** A spoken phrase: typed into the TV's text field, or searched for on Google TV. */
+    fun voice(phrase: String) {
+        if (!client.send("type" to "voice", "text" to phrase)) toast("Нет связи с ТВ")
+    }
 }

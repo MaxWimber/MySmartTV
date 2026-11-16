@@ -166,6 +166,10 @@ class RemoteClient(
                 _state.update { it.copy(status = Status.Connected, tvName = cur.name ?: serverName) }
             }
             "state" -> _state.update { it.copy(screenTitle = m.optString("title")) }
+            "voice" -> {
+                val phrase = m.optString("text")
+                emit(if (m.optString("result") == "typed") "Введено: «$phrase»" else "Ищу на ТВ: «$phrase»")
+            }
             "error" -> when (m.optString("code")) {
                 "bad_token" -> {
                     s.tvId?.let(store::remove)

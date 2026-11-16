@@ -205,6 +205,27 @@ class AndroidTv extends EventEmitter {
     this.exec(`input keyevent ${KEYCODE_PASTE}`);
   }
 
+  /**
+   * A phrase said into the phone. With a text field focused on the TV (its
+   * on-screen keyboard is up) the phrase is typed there; otherwise it becomes a
+   * Google TV search, like the microphone button of a Google TV remote.
+   * Returns 'typed' or 'search'.
+   */
+  async voice(phrase, setHostClipboard) {
+    if (!this.ready || !phrase) return null;
+    if (await this.keyboardShown()) {
+      await this.text(phrase, setHostClipboard);
+      return 'typed';
+    }
+    await run(this.adbExe, ['-s', SERIAL, 'shell', `am start -a android.search.action.GLOBAL_SEARCH --es query ${shQuote(phrase)}`], { timeout: 10000 });
+    return 'search';
+  }
+
+  async keyboardShown() {
+    const r = await run(this.adbExe, ['-s', SERIAL, 'shell', 'dumpsys input_method | grep mInputShown'], { timeout: 5000 });
+    return /mInputShown=true/.test(r.stdout);
+  }
+
   /** Opens a link in the Google TV app that handles it. */
   async openUrl(url) {
     if (!this.ready) return false;

@@ -214,6 +214,18 @@ async function handleRemoteCommand(msg, ws) {
       else win.webContents.insertText(text);
       return;
     }
+    case 'voice': {
+      const phrase = String(msg.text ?? '').trim().slice(0, 500);
+      if (!phrase) return;
+      if (!tv.ready) {
+        remote.send(ws, { type: 'error', code: 'load_failed', message: 'Google TV ещё запускается' });
+        return;
+      }
+      if (panelVisible) await showTv();
+      const done = await tv.voice(phrase, (t) => clipboard.writeText(t));
+      remote.send(ws, { type: 'voice', result: done, text: phrase });
+      return;
+    }
     case 'mouse':
       inputHelper.move(msg.dx, msg.dy);
       return;

@@ -89,7 +89,7 @@ fun ConnectScreen(vm: RemoteViewModel) {
                     .height(56.dp),
             ) { Text("Сканировать QR-код", fontSize = 17.sp) }
             Text(
-                "На ТВ: Настройки → Подключить пульт",
+                "QR-код на ПК: Ctrl+Alt+S или значок SmartTV в трее → «Подключить пульт»",
                 color = Palette.Muted,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(top = 6.dp),
@@ -193,7 +193,7 @@ private fun PinDialog(tvName: String, onDismiss: () -> Unit, onPin: (String) -> 
         title = { Text("Подключение к «$tvName»") },
         text = {
             Column {
-                Text("Введите PIN с экрана ТВ (Настройки → Подключить пульт)", color = Palette.Muted)
+                Text("Введите PIN из панели SmartTV на ПК (Ctrl+Alt+S)", color = Palette.Muted)
                 Spacer(Modifier.height(12.dp))
                 OutlinedTextField(
                     value = pin,
