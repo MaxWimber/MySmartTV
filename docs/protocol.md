@@ -67,7 +67,7 @@ http://192.168.1.12:8765/#pair=1234
 | Мышь (сдвиг в пикселях) | `{ "type": "mouse", "dx": 12, "dy": -4 }` |
 | Клик | `{ "type": "click", "button": "left" }` (или `"right"`) |
 | Колесо | `{ "type": "scroll", "dy": -120 }` (120 = один щелчок колеса, минус = вниз) |
-| Громкость Windows | `{ "type": "volume", "action": "up" }` (`up`, `down`, `mute`) |
+| Громкость | `{ "type": "volume", "action": "up" }` (`up`, `down`, `mute`): в Google TV — громкость Google TV с его ползунком, в панели — громкость Windows |
 | Открыть ссылку | `{ "type": "open", "url": "https://youtu.be/dQw4w9WgXcQ" }` |
 | Запросить состояние | `{ "type": "getState" }` |
 | Проверка связи | `{ "type": "ping" }` → `{ "type": "pong" }` |

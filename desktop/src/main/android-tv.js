@@ -30,6 +30,7 @@ const KEY_CODES = {
   backspace: 67,    // DEL
 };
 const KEYCODE_PASTE = 279;
+const VOLUME_CODES = { up: 24, down: 25, mute: 164 }; // VOLUME_UP, VOLUME_DOWN, VOLUME_MUTE
 
 const SMARTTUBE = 'org.smarttube.stable';
 const YOUTUBE_HOST = /(^|\.)(youtube\.com|youtu\.be|youtube-nocookie\.com)$/i;
@@ -174,6 +175,14 @@ class AndroidTv extends EventEmitter {
 
   key(name) {
     const code = KEY_CODES[name];
+    if (!code || !this.ready) return false;
+    this.exec(`input keyevent ${code}`);
+    return true;
+  }
+
+  /** Changes the Google TV volume; Google TV shows its own volume slider. */
+  volume(action) {
+    const code = VOLUME_CODES[action];
     if (!code || !this.ready) return false;
     this.exec(`input keyevent ${code}`);
     return true;

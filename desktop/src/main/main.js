@@ -224,7 +224,9 @@ async function handleRemoteCommand(msg, ws) {
       inputHelper.scroll(msg.dy);
       return;
     case 'volume':
-      inputHelper.volume(msg.action);
+      // Over Google TV its own volume slider shows (Windows hides its volume
+      // flyout above fullscreen windows); on the panel the Windows volume changes.
+      if (!(onTv && tv.volume(msg.action))) inputHelper.volume(msg.action);
       return;
     case 'open': {
       const url = parseHttpUrl(msg.url);
