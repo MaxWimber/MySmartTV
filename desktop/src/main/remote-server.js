@@ -149,7 +149,7 @@ class RemoteServer extends EventEmitter {
       if (msg && typeof msg === 'object') this._onMessage(ws, msg);
     });
     ws.on('close', () => { if (ws.deviceId) this.emit('clients-changed', this.clientCount()); });
-    this.send(ws, { type: 'hello', name: this.serverName, id: this.serverId, version: PROTOCOL_VERSION, pairingRequired: true });
+    this.send(ws, { type: 'hello', name: this.serverName, pcName: os.hostname(), id: this.serverId, version: PROTOCOL_VERSION, pairingRequired: true });
   }
 
   _onMessage(ws, msg) {
@@ -235,7 +235,7 @@ class RemoteServer extends EventEmitter {
     });
     udp.on('message', (buf, rinfo) => {
       if (buf.toString().trim() !== DISCOVERY_REQUEST) return;
-      const reply = JSON.stringify({ service: 'smarttv', name: this.serverName, id: this.serverId, port: this.port, version: PROTOCOL_VERSION });
+      const reply = JSON.stringify({ service: 'smarttv', name: this.serverName, pcName: os.hostname(), id: this.serverId, port: this.port, version: PROTOCOL_VERSION });
       udp.send(reply, rinfo.port, rinfo.address);
     });
     udp.bind(DISCOVERY_PORT);

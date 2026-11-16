@@ -19,8 +19,10 @@
 Клиент шлёт UDP-пакет с текстом `SMARTTV_DISCOVER` на `255.255.255.255:8766`. Каждый ПК со SmartTV отвечает на адрес отправителя:
 
 ```json
-{ "service": "smarttv", "name": "SmartTV", "id": "a1b2c3d4e5f6", "port": 8765, "version": 1 }
+{ "service": "smarttv", "name": "SmartTV", "pcName": "Compic", "id": "a1b2c3d4e5f6", "port": 8765, "version": 1 }
 ```
+
+`pcName` — имя компьютера в Windows, его пульт показывает пользователю.
 
 `id` постоянен для компьютера. Пульт сохраняет его, чтобы найти ПК снова, когда сменится IP.
 
@@ -38,7 +40,7 @@ http://192.168.1.12:8765/#pair=1234
 
 1. После соединения сервер сразу шлёт:
    ```json
-   { "type": "hello", "name": "SmartTV", "id": "a1b2c3d4e5f6", "version": 1, "pairingRequired": true }
+   { "type": "hello", "name": "SmartTV", "pcName": "Compic", "id": "a1b2c3d4e5f6", "version": 1, "pairingRequired": true }
    ```
 2. **Первое подключение**, по PIN с экрана:
    ```json
