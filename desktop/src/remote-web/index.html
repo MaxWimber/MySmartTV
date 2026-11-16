@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <title>SmartTV пульт</title>
+  <link rel="stylesheet" href="remote.css">
+</head>
+<body>
+  <div id="pairView" class="view">
+    <div class="pair-box">
+      <h1>Smart<span>TV</span> пульт</h1>
+      <p id="pairHint">Введите PIN с экрана телевизора<br><small>Главный экран → Настройки → Подключить пульт</small></p>
+      <input id="pinInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="one-time-code" placeholder="••••">
+      <button id="pairBtn" class="primary">Подключить</button>
+      <p id="pairError" class="error"></p>
+    </div>
+  </div>
+
+  <div id="remoteView" class="view hidden">
+    <header class="top">
+      <span id="connDot" class="dot"></span>
+      <span id="screenTitle" class="screen-title">Подключение…</span>
+    </header>
+
+    <nav class="tabs">
+      <button data-tab="pad" class="active">Пульт</button>
+      <button data-tab="touch">Тачпад</button>
+      <button data-tab="text">Текст</button>
+    </nav>
+
+    <section id="tab-pad" class="tab">
+      <div class="dpad">
+        <button class="dp up" data-key="up" aria-label="Вверх">▲</button>
+        <button class="dp left" data-key="left" aria-label="Влево">◀</button>
+        <button class="dp ok" data-key="ok">OK</button>
+        <button class="dp right" data-key="right" aria-label="Вправо">▶</button>
+        <button class="dp down" data-key="down" aria-label="Вниз">▼</button>
+      </div>
+      <div class="grid g3">
+        <button data-key="back">↩ Назад</button>
+        <button data-key="home">⌂ Домой</button>
+        <button data-key="playpause">⏯ Пауза</button>
+      </div>
+      <div class="grid g3">
+        <button data-key="seekback">⏪ 10 с</button>
+        <button data-vol="mute">🔇</button>
+        <button data-key="seekfwd">10 с ⏩</button>
+      </div>
+      <div class="grid g2">
+        <button data-vol="down">🔉 Тише</button>
+        <button data-vol="up">🔊 Громче</button>
+      </div>
+    </section>
+
+    <section id="tab-touch" class="tab hidden">
+      <div id="touchpad" class="touchpad">
+        <span>Водите пальцем: курсор<br>Тап: клик<br>Двумя пальцами: прокрутка</span>
+      </div>
+      <div class="grid g3">
+        <button data-click="left">Клик</button>
+        <button data-click="right">Правый клик</button>
+        <button data-key="back">↩ Назад</button>
+      </div>
+    </section>
+
+    <section id="tab-text" class="tab hidden">
+      <label class="lbl" for="textInput">Ввести текст в поле на ТВ</label>
+      <textarea id="textInput" rows="2" placeholder="Поисковый запрос…"></textarea>
+      <div class="grid g3">
+        <button id="sendText" class="primary">Отправить</button>
+        <button data-key="backspace">⌫ Стереть</button>
+        <button data-key="enter">↵ Enter</button>
+      </div>
+
+      <label class="lbl" for="urlInput">Открыть ссылку на ТВ</label>
+      <input id="urlInput" type="url" inputmode="url" placeholder="https://youtu.be/…">
+      <button id="openUrl" class="primary wide">Открыть на ТВ</button>
+
+      <button id="unpair" class="danger wide">Отвязать этот телефон</button>
+    </section>
+
+    <p id="remoteError" class="error"></p>
+  </div>
+
+  <script src="remote.js"></script>
+</body>
+</html>

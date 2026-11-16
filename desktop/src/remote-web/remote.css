@@ -1,0 +1,159 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: #0b0d12;
+  color: #f2f4f8;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+}
+
+.hidden { display: none !important; }
+
+.view {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  border-radius: 16px;
+  background: #1f2536;
+  padding: 16px 8px;
+  font-size: 17px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background 0.08s, transform 0.08s;
+}
+button:active, button.pressed { background: #39425c; transform: scale(0.96); }
+button.primary { background: #2f6fd6; }
+button.primary:active { background: #4a86e8; }
+button.danger { background: rgba(255, 90, 95, 0.16); color: #ff9a9d; }
+button.wide { width: 100%; margin-top: 10px; }
+
+.error { color: #ff7b80; min-height: 1.3em; text-align: center; }
+
+/* pairing */
+.pair-box { text-align: center; padding-top: 12vh; }
+.pair-box h1 { font-size: 30px; margin: 0 0 12px; }
+.pair-box h1 span { color: #4da3ff; }
+.pair-box p { color: #9aa3b5; line-height: 1.5; }
+#pinInput {
+  display: block;
+  width: 70%;
+  margin: 24px auto 16px;
+  padding: 14px;
+  border: 2px solid #252b3d;
+  border-radius: 16px;
+  background: #151a26;
+  color: #fff;
+  font-size: 40px;
+  letter-spacing: 16px;
+  text-align: center;
+  outline: none;
+}
+#pinInput:focus { border-color: #4da3ff; }
+#pairBtn { width: 70%; }
+
+/* remote */
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 4px 14px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #ff5a5f; flex: none; }
+.dot.on { background: #40c878; }
+.screen-title { font-size: 15px; color: #9aa3b5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #151a26;
+  margin-bottom: 18px;
+}
+.tabs button { padding: 10px 4px; background: transparent; font-size: 15px; border-radius: 10px; }
+.tabs button.active { background: #2a3146; }
+
+.dpad {
+  position: relative;
+  width: min(78vw, 320px);
+  aspect-ratio: 1;
+  margin: 6px auto 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1a2030 0 60%, #151a26 61%);
+}
+.dp {
+  position: absolute;
+  width: 34%;
+  height: 34%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background: transparent;
+  border-radius: 50%;
+}
+.dp.up { top: 2%; left: 33%; }
+.dp.down { bottom: 2%; left: 33%; }
+.dp.left { left: 2%; top: 33%; }
+.dp.right { right: 2%; top: 33%; }
+.dp.ok {
+  top: 31%;
+  left: 31%;
+  width: 38%;
+  height: 38%;
+  background: #2a3146;
+  font-weight: 700;
+  font-size: 22px;
+}
+.dp:active, .dp.pressed { background: #39425c; }
+
+.grid { display: grid; gap: 10px; margin-bottom: 10px; }
+.g2 { grid-template-columns: 1fr 1fr; }
+.g3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.touchpad {
+  height: 52vh;
+  min-height: 260px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, #1a2030, #141826);
+  border: 1px solid #252b3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #5d6680;
+  line-height: 1.7;
+  margin-bottom: 12px;
+  touch-action: none;
+}
+
+.lbl { display: block; color: #9aa3b5; font-size: 14px; margin: 6px 2px 8px; }
+textarea, input[type="url"] {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #252b3d;
+  border-radius: 14px;
+  background: #151a26;
+  color: #fff;
+  font: inherit;
+  font-size: 17px;
+  outline: none;
+  resize: none;
+  user-select: text;
+  -webkit-user-select: text;
+  margin-bottom: 10px;
+}
+textarea:focus, input[type="url"]:focus { border-color: #4da3ff; }
+#tab-text .lbl:nth-of-type(2) { margin-top: 22px; }
+#unpair { margin-top: 36px; }
